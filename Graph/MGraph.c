@@ -6,6 +6,10 @@
 #include <stdlib.h>
 #define MAXVEX 100         // 最大顶点数
 #define INFINITY 65535     // 用 65535 代表 ∞
+#define TRUE 1
+#define FALSE 0
+typedef int Boolean;
+Boolean visited[MAXVEX];   // 访问标志的数组
 typedef char VertexType;   // 顶点类型
 typedef int EdgeType;      // 边上的权值
 typedef struct 
@@ -32,4 +36,27 @@ void CreateMGraph(MGraph *G)
     G->arc[i][j] = w;
     G->arc[j][i] = G->arc[i][j]; // 因为是无向图，矩阵对称
   }
+}
+
+// Depth First Search
+// 深度优先递归算法
+void DFS(MGraph G, int i)
+{
+  int j;
+  printf("%c", G.vexs[i]);
+  visited[i] = TRUE;
+  for(j = 0; j < G.numVertexes; j++)
+    if(G.arc[i][j] == 1 && !visited[j])
+      DFS(G, j); // 对未访问的邻接顶点递归调用
+}
+
+// 深度遍历操作
+void DFSTraverse(MGraph G)
+{
+  int i;
+  for(i = 0; i < G.numVertexes; i++)
+    visited[i] = FALSE;  // 初始化所有顶点为未访问状态
+  for(i = 0; i < G.numVertexes; i++)
+    if(!visited[i])
+      DFS(G, i);
 }

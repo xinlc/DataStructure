@@ -6,6 +6,10 @@
 #include <stdlib.h>
 #define MAXVEX 100         // 最大顶点数
 #define INFINITY 65535     // 用 65535 代表 ∞
+#define TRUE 1
+#define FALSE 0
+typedef int Boolean;
+Boolean visited[MAXVEX];   // 访问标志的数组
 typedef char VertexType;   // 顶点类型
 typedef int EdgeType;      // 边上的权值
 typedef struct  EdgeNode   // 边表结点
@@ -47,4 +51,29 @@ void CreateALGraph(GraphAdjList *G)
     e->next = G->adjList[i].firstedge; // 将e指针指向当前顶点指向的结点
     G->adjList[j].firstedge = e;  // 将当前顶点的指针指向e
   }
+}
+
+// 邻接表的深度优先递归算法
+void DFS(GraphAdjList *GL, int i)
+{
+  EdgeNode *p;
+  visited[i] = TRUE;
+  printf("%c", GL->adjList[i].data);
+  p = GL->adjList[i].firstedge;
+  while(p)
+  {
+    if(!visited[p->adjvex])
+      DFS(GL, p->adjvex);
+    p = p->next;
+  }
+}
+
+void DFSTraverse(GraphAdjList *GL)
+{
+  int i;
+  for(i = 0; i < GL->numVertexes; i++)
+    visited[i] = FALSE;
+  for(i = 0; i < GL->numVertexes; i++)
+    if(!visited[i])
+      DFS(GL, i);
 }
